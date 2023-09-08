@@ -1,0 +1,69 @@
+Reference Paper : https://pubs.acs.org/doi/full/10.1021/jp0268112  
+
+On the Water−Carbon Interaction for Use in Molecular Dynamics Simulations of Graphite and Carbon Nanotubes
+
+    T. Werder, J. H. Walther, R. L. Jaffe, T. Halicioglu, and P. Koumoutsakos
+
+--------------------------------------------------------------------------------------------------------------------------------------
+# fftool to generate input files for carrying MD simulation in LAMMPS
+
+1. xyz files of graphite and water		
+
+H2O.xyz  downloaded from http://materia.fisica.unimi.it/manini/dida/structures.html
+graphite.cif downloaded from Materials Project Website
+
+
+2.  Extend to appropriate size to neglet finite size effects. Remove Addtional layers if it does not effect the property of study.
+
+The first method of extension and then cleaving is quiet confusing as the supercell size becomes large. So , I opted for a 
+personally easier choice og the second option.
+ - Convert to a orthorhbic unit cell using atomsk initial.cif -orthogonal-cell final.cif
+ - Cleave the edges such that no overlap occurs when PBC is applied
+ - Extend the unit cell using edit unit cell option in vesta and click transform and change the diagonal indices to stretch in z and y directions
+   as required
+ - Cleave the edges to make sure that when PBC is applied , there would not be any overlap !
+ 
+3. Fetching and creaing .ff files
+
+Check the fftool documentation for file format  https://github.com/paduagroup/fftool#force-field-file-format
+
+For graphite , there are CC , CO , OH and CH bonds
+
+3 Atom Types ( C , H , O )
+2 Bond Types ( C-C , H-O ) . We can add C-H , C-O bonds if we want but they are unlikely.
+2 Angle Types ( C-C and O-H) 
+1 Dihedtal Type (C-C-C-C)
+
+
+In the paper ,  most models are  based on a pairwise additive Lennard-Jones potential between the oxygen atoms of the water and the carbon
+and H atoms of water and the Carbon.
+
+Some models also include an electrostatic interaction between the partial charge sites on the water molecules and point quadrupole moments on the carbons.
+
+Some models for Carbon-Water potential is based on mixing rules.
+
+Some models used a flexible graphite surface.
+
+> The details of each model is explained in the folder allocated for each model
+
+
+The force fields considered in paper will just have ATOMS section for both materials graphite and water and once fftool creates the inut file ,
+we can modify it to provide the LJ parameters for CO and OO interaction which are the only considered LJ interactions.`
+
+4. Creating the simulation set up with packmol
+
+- Water ocupies 30 armstrong cube roughly , for 1000 water molecules and leaving enough space both sides of graphite , watter 
+  lattice size was chosen to be 65*65*7 armstrong.
+- 3 armstrong spacing between water layer and graphite.
+
+5. Creating a sample input file which later need to be modifed anyways
+
+According to the paper , the force fields are considered for water as well as water carbon interaction only.
+fftool -b x,y,z -l -a -p xy 1 graphite.xyz 1000 H20-SPC.xyz
+
+
+
+# LAMMPS  input script
+
+
+ 
