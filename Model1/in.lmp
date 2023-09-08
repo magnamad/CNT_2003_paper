@@ -36,10 +36,13 @@ variable PBAR equal 1.0
 
 velocity all create ${TK} 12345
 
-fix TPSTAT all npt temp ${TK} ${TK} 100 iso ${PBAR} ${PBAR} 1000
-
+#NVT Ensemble 
+fix TVSTAT all nvt temp/berendsen ${TK} ${TK} 100 
 thermo 1000
 thermo_style custom step cpu etotal ke pe evdwl ecoul elong temp press vol density
+run 1000
+fix nve EVSTAT all nve
+run 1000
 
 dump TRAJ all custom 1000 dump.lammpstrj id mol type element q xu yu zu
 dump_modify TRAJ element C H O
@@ -60,6 +63,6 @@ dump_modify TRAJ element C H O
 #unfix TPSTAT
 #fix TSTAT all nvt temp ${TK} ${TK} 100
 
-run 10000
+run 1000000
 
 write_data data.eq.lmp
