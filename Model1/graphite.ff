@@ -1,0 +1,6 @@
+### Inert graphite
+
+ATOMS
+#   type  m/uma    q/e    pot   pars(A, kJ/mol)
+C   C     12.011   0.0   lj    0.0   0.0
+

@@ -1,0 +1,10 @@
+# SPC/E( kJ/mol, A, deg)
+#Values taken from lammps documentation 
+# add special M site using LAMMPS tip4p pair styles
+
+ATOMS
+#   type     m/uma    q/e    pot   pars
+O   O     15.999    -1.1794   lj    3.1668   0.1553
+H   H     1.008     0.5897   lj    0.0000   0.000000
+
+

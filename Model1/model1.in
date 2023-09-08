@@ -1,0 +1,16 @@
+tolerance 2.5
+filetype xyz
+output model1.xyz
+
+structure graphite-120.xyz 
+number 1 
+inside box 0 0 0 118.43040  119.65800 3.90155
+end structure
+
+structure H2O-SPC.xyz   
+number 1000
+inside box 27.5 27.5 6.90155  92.5 92.5 14.8310 
+end structure
+
+
+
