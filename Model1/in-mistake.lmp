@@ -40,11 +40,12 @@ velocity all create ${TK} 12345
 fix TVSTAT all nvt temp/berendsen ${TK} ${TK} 100 
 thermo 1000
 thermo_style custom step cpu etotal ke pe evdwl ecoul elong temp press vol density
-run 1000
+run 50000
+unfix TVSTAT
 fix nve EVSTAT all nve
-run 1000
+run 50000
 
-dump TRAJ all custom 1000 dump.lammpstrj id mol type element q xu yu zu
+dump TRAJ all custom 500 dump.lammpstrj id mol type element q xu yu zu
 dump_modify TRAJ element C H O
 
 # restart 10000 restart1.lmp restart2.lmp
