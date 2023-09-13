@@ -1,5 +1,5 @@
 # SPC/E( kJ/mol, A, deg)
-#Values taken from lammps documentation 
+#Values taken from fftool documentation 
 
 ATOMS
 #   type     m/uma    q/e    pot   pars

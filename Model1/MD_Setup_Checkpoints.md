@@ -27,6 +27,10 @@ personally easier choice og the second option.
 
 Check the fftool documentation for file format  https://github.com/paduagroup/fftool#force-field-file-format
 
+
+> Note that LAMMPS real units take kcal/mol as input for energy while fftool requires Kj/mol. fftool will do the conversion to kcal/mol
+
+
 For graphite , there are CC , CO , OH and CH bonds
 
 3 Atom Types ( C , H , O )
