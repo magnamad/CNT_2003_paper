@@ -22,6 +22,13 @@ personally easier choice og the second option.
  - Extend the unit cell using edit unit cell option in vesta and click transform and change the diagonal indices to stretch in z and y directions
    as required
  - Cleave the edges to make sure that when PBC is applied , there would not be any overlap !
+
+> If I go ahead with this this structure containing 2 layers of graphite , i can't see a way to specify that there is no bonds between the 2 layers. So , maybe Make each layer as a diffrent .xyz file and have .ff file for both. That should be correct. 
+
+- Open the 2 layer graphite file in VESTA . Note that the interlayer distance is  3.90155 angstrom. C-C distance is 1.4245 angstrom.
+- Peel of 1st llayer and save as graphite-A.xyx
+- Peel of 2nd layer and save as graphite-B.xyz
+
  
 3. Fetching and creaing .ff files
 
@@ -74,12 +81,22 @@ time - fs  distance  - Angstrom  energy - kcal/mol  Temp  - Kelvin Pressure - at
 2. boundary  p p p 
 Periodic in all 3 directions. To make sure periodic images dont interact , 20 armstrong vacuum provided at the top during simulation set up.
 
-3. atom style full
+3. atom style full 
+   bond_style zero
+   angle_style zero
+
+
 
 All styles store coordinates, velocities, atom IDs and types. In addition , the charge .
 
 > There are no bond_style , angle_style and dihedral_style by construction of the model ? For graphite , no need maybe . May be its needed , if thats how LAMMPS know theat the atoms are bonded. 
 > For water , it is SPC/E model . So, bonds and angles are fixed.  Just like graphite , no need to write bonds and angles in ff or that is the way lammps know that they are bonded.
+
+
+zero means Using an bond style of zero means bond forces and energies are not computed, but the geometry of bond pairs is still accessible to other commands.
+
+
+
 
 4. special_bonds lj/coul w1 w2 w3 
 
@@ -147,6 +164,14 @@ Setting up variables  for reuse
 
 Random initialization of velocities with a seed of 12345
 
+
+
+> You can fix all the atoms position in LAMMPS , as in , it does not experience any force , so no vibration of atoms or translation/rotation of sheet
+> There are ways to ensure that the sheet does not transate but the atoms vibrate too in LAMMPS.
+
+
+
+
 14. fix TVSTAT all nvt temp/berendsen Tstart Tstop Tdamp
 
 In LAMMPS, a “fix” is any operation that is applied to the system during timestepping or minimization. Examples include
@@ -164,22 +189,35 @@ Output thermodynamics every n timesteps
 
 16. thermostyle
 
-What all thermodynamic quantities needs to be printed
+What all thermodynamic quantities needs to be printed.
+
+evdwl = van der Waals pairwise energy (includes etail)
+ecoul = Coulombic pairwise energy
+elong = long-range kspace energy
+
 
 17. run 2000
 
 2 picosecond run if timestep is 1 fs.
 
-18. fix EVSTAT all nve
+18. unfix TVSTAT
+
+As we are stopping NVT and switchin to NVER simulatiion
+
+20. fix EVSTAT all nve
 
 Run 100 ps in NVE ensemble
+
+
+
+
 
 -----
 
 What is left  ? 
 - Total carbon−oxygen Lennard-Jones interaction energy.
 - water denity profile (compute rdf? )
-- Need to dump trajectories after equilibriation.
+- Need to dump trajectories after equilibriation. dump command comes after equilibriation , then this is ensured.
 
 
 
