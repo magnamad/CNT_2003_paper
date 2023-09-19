@@ -65,7 +65,10 @@ we can modify it to provide the LJ parameters for CO and OO interaction which ar
 
 - Water ocupies 30 armstrong cube roughly , for 1000 water molecules and leaving enough space both sides of graphite , watter 
   lattice size was chosen to be 65*65*7 armstrong.
-- 3 armstrong spacing between water layer and graphite.
+- 3 armstrong spacing between water layer and graphite.F
+- Fix graphite_B at bottom 
+- Fix Graphite A after leaving 3.4 interlayer distance
+- The fixed command will lead to corner of the sheet to be origin. Just verify again.
 
 5. Creating a sample input file which later need to be modifed anyways
 
