@@ -73,7 +73,7 @@ we can modify it to provide the LJ parameters for CO and OO interaction which ar
 5. Creating a sample input file which later need to be modifed anyways
 
 According to the paper , the force fields are considered for water as well as water carbon interaction only.
-fftool -b x,y,z -l -a -p xy 1 graphite.xyz 1000 H20-SPC.xyz
+fftool -b x,y,z -l -a -p xy 1 graphite-A.xyz  1 graphite-B.xyz 1000 H20-SPC.xyz
 
 
 
@@ -107,6 +107,8 @@ zero means Using an bond style of zero means bond forces and energies are not co
 
 4. special_bonds lj/coul w1 w2 w3 
 
+Since the form of LJ in the paper and in LAMMPS are same , no need to scale it as such. 
+
 Strength of pairwise interaction to be accounted for . 
 
 The first of the 3 coefficients (LJ or Coulombic) is the weighting factor on 1-2 atom pairs, which are pairs of atoms directly bonded to each other. The second coefficient is the weighting factor on 1-3 atom pairs which are those separated by 2 bonds (e.g. the two H atoms in a water molecule). The third coefficient is the weighting factor on 1-4 atom pairs which are those separated by 3 bonds (e.g. the first and fourth atoms in a dihedral interaction). Thus if the 1-2 coefficient is set to 0.0, then the pairwise interaction is effectively turned off for all pairs of atoms bonded to each other. If it is set to 1.0, then that interaction will be at full strength.
@@ -117,7 +119,7 @@ The first of the 3 coefficients (LJ or Coulombic) is the weighting factor on 1-2
 > Should LAMMPS know that they are bonded. Anyways , their interaction energy coefficients  are set to zero. Can I fix the bonds and angles of water with SHAKE and the entire graphite atom coordinates with SHAKE. That should work , I guess.
 
 
-> Totally confused what value to set. Also , I now doubt whether the graphite force field file containing just ATOMS section is correct or not.
+> Totally confused what value to set. Also , I now doubt whether the graphite force field file containing just ATOMS section is correct or not. It is correct. You can don't have to use SHAKE to fix C. Set forces to zero.
 
 
 5. pair_style hybrid lj/cut/coul/long 10.0 10.0`
