@@ -95,9 +95,8 @@ time - fs  distance  - Angstrom  energy - kcal/mol  Temp  - Kelvin Pressure - at
 Periodic in all 3 directions. To make sure periodic images dont interact , 20 armstrong vacuum provided at the top during simulation set up.
 
 3. atom style full 
-   bond_style zero
-   angle_style zero
-
+   bond_style zero nocoeff
+   angle_style zero nocoeff
 
 
 All styles store coordinates, velocities, atom IDs and types. In addition , the charge .
@@ -108,7 +107,7 @@ All styles store coordinates, velocities, atom IDs and types. In addition , the 
 
 zero means Using an bond style of zero means bond forces and energies are not computed, but the geometry of bond pairs is still accessible to other commands.
 
-
+The nocoeff flag is to let lammps know that we won't specify bond coeff in lammps script , so read from data.lmp
 
 
 4. special_bonds lj/coul w1 w2 w3 
@@ -173,9 +172,30 @@ This command sets parameters that affect the building and use of pairwise neighb
 
 Setting up variables  for reuse
 
-13. velocity all create ${TK} 12345
+- group H2O-SPC type 2 3
 
-Random initialization of velocities with a seed of 12345
+- group graphite type 1
+
+- velocity H2O-SPC  create ${TK} 12345
+Only water molecules are moving
+
+- run 0  # temperature may not be 300K 
+  velocity H2O-SPC  scale ${TK}     # now it should be
+
+> Read https://docs.lammps.org/velocity.html
+
+Basically , since we are employing the shake constraint , the assigned velocities get cancelled 
+and won't end up at the desired tempearture."  A workaround for this is to perform a run 0 command, which ensures all DOFs are accounted for properly, and then rescale the temperature to the desired value before performing a simulation."
+
+- fix C_atom_fix graphite setforce 0.0 0.0 0.0
+
+Graphite atoms are nonvibrating
+ 
+- velocity graphite set 0.0 0.0 0.0
+
+Graphite atoms are not moving
+
+- fix shake_H2O  H2O-SPC shake 0.0001 20 10 b 1 a 1 # shake-H2O is fix id .H2O-SPC is group id
 
 
 
@@ -185,7 +205,7 @@ Random initialization of velocities with a seed of 12345
 
 
 
-14. fix TVSTAT all nvt temp/berendsen Tstart Tstop Tdamp
+-  fix TVSTAT all nvt temp Tstart Tstop Tdamp
 
 In LAMMPS, a “fix” is any operation that is applied to the system during timestepping or minimization. Examples include
    - updating of atom positions and velocities due to time integration
@@ -194,13 +214,13 @@ In LAMMPS, a “fix” is any operation that is applied to the system during tim
 
 Here , TVSTAT is the id of fix . all means it applies to all atoms. 
 temp is the keyword of nvt style  .It takes 3 values , Tstart , Tstop ,and Tdamp_coefficient.
-temp/berendsen makes use of berendsen thermostat.
+temp/berendsen makes use of berendsen thermostat but by default fix nvt uses Nose-Hoover
 
 
-15. thermo 10000
+- thermo 10000
 Output thermodynamics every n timesteps
 
-16. thermostyle
+- thermostyle
 
 What all thermodynamic quantities needs to be printed.
 
@@ -209,21 +229,36 @@ ecoul = Coulombic pairwise energy
 elong = long-range kspace energy
 
 
-17. run 2000
+-  run 2000
 
 2 picosecond run if timestep is 1 fs.
 
-18. unfix TVSTAT
+-  unfix TVSTAT
 
 As we are stopping NVT and switchin to NVER simulatiion
 
-20. fix EVSTAT all nve
+-  fix EVSTAT all nve
 
-Run 100 ps in NVE ensemble
+Run ps in NVE ensemble
+
+- run ${equi_steps}
+
+- dump TRAJ all custom 500 dump.lammpstrj id mol type element q xu yu zu
+
+Need trajectories for droplet analysis method
 
 
+- dump_modify TRAJ element C H O
+naming 1,2,3 as C,H,O in dump file
 
 
+- run ${total_steps}
+
+self-explanatory
+
+- write_data data.eq.lmp
+
+self explanatory
 
 -----
 

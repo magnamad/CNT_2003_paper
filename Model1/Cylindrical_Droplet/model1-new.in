@@ -3,19 +3,21 @@ filetype xyz
 output model1.xyz
 
 structure graphite-B.xyz 
-number 1 
+number 1
+center 
 fixed 0 0 0.0 0 0 0
 end structure
 
 structure graphite-A.xyz  
 number 1
+center
 fixed 0 0 3.4 0 0 0
 end structure
 
 structure H2O-SPC.xyz   
 number 1000
-#inside box 27.5 27.5 6.40  92.5 92.5 20.0 
-inside box 3 40  6.40 115.43040  80  16.4
+#inside box 3 40  6.40 115.43040  80  16.6
+inside box -56.2152 -20 6.40 56.2152 20 16.6 
 end structure
 
 
