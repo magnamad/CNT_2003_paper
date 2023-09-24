@@ -3,15 +3,15 @@
 units real
 boundary p p p
 
-variable equi_steps equal 50000 # 100 ps 
-variable total_steps equal 500000 # 1 ns
+variable equi_steps equal 100000 # 100 ps 
+variable total_steps equal 1000000 # 1 ns
 variable TK  equal 300.0  
 variable PBAR equal 1.0
 
 
 atom_style full
-bond_style zero
-angle_style zero
+bond_style zero nocoeff
+angle_style zero nocoeff
 
 special_bonds lj/coul 0.0 0.0 0.0
 
@@ -45,16 +45,16 @@ velocity H2O-SPC  scale ${TK}     # now it should be
 fix C_atom_fix graphite setforce 0.0 0.0 0.0 
 velocity graphite set 0.0 0.0 0.0 
 
-fix shake H2O-SPC shake 0.0001 b 1 a 1
+fix shake_H2O  H2O-SPC shake 0.0001 20 10 b 1 a 1 # shake-H2O is fix id .H2O-SPC is group id 
 
-timestep 2.0
+timestep 1.0
 #NVT Ensemble 
-fix TVSTAT all nvt temp/berendsen ${TK} ${TK} 100 
+fix TVSTAT all nvt temp ${TK} ${TK} 100 
 thermo 1000
 thermo_style custom step cpu etotal ke pe evdwl ecoul elong temp press
 run ${equi_steps}
 unfix TVSTAT
-fix nve EVSTAT all nve
+fix EVSTAT all nve
 run ${equi_steps}
 
 dump TRAJ all custom 500 dump.lammpstrj id mol type element q xu yu zu
