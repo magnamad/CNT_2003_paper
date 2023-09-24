@@ -1,0 +1,65 @@
+# created by fftool
+
+units real
+boundary p p p
+
+variable equi_steps equal 50000 # 100 ps 
+variable total_steps equal 500000 # 1 ns
+variable TK  equal 300.0  
+variable PBAR equal 1.0
+
+
+atom_style full
+bond_style zero
+angle_style zero
+
+special_bonds lj/coul 0.0 0.0 0.0
+
+# remove hybrid if not necessary
+pair_style hybrid lj/cut/coul/long 10.0 10.0
+# pair_modify tail yes
+kspace_style pppm 1.0e-5
+
+read_data data.lmp
+
+pair_coeff    1    1 lj/cut/coul/long     0.000000     0.000000  # C C
+pair_coeff    1    2 lj/cut/coul/long     0.000000     0.000000  # C H
+pair_coeff    1    3 lj/cut/coul/long     0.074928     3.190000  # C O
+pair_coeff    2    2 lj/cut/coul/long     0.000000     0.000000  # H H
+pair_coeff    2    3 lj/cut/coul/long     0.000000     0.000000  # H O
+pair_coeff    3    3 lj/cut/coul/long     0.037118     3.166800  # O O
+
+# minimize 1.0e-4 1.0e-6 100 1000
+# reset_timestep 0
+
+neighbor 2.0 bin
+# neigh_modify delay 0 every 1 check yes
+
+
+group H2O-SPC type 2 3
+group graphite type 1
+
+velocity H2O-SPC  create ${TK} 12345
+run 0                             # temperature may not be 300K
+velocity H2O-SPC  scale ${TK}     # now it should be
+fix C_atom_fix graphite setforce 0.0 0.0 0.0 
+velocity graphite set 0.0 0.0 0.0 
+
+fix shake H2O-SPC shake 0.0001 b 1 a 1
+
+timestep 2.0
+#NVT Ensemble 
+fix TVSTAT all nvt temp/berendsen ${TK} ${TK} 100 
+thermo 1000
+thermo_style custom step cpu etotal ke pe evdwl ecoul elong temp press
+run ${equi_steps}
+unfix TVSTAT
+fix nve EVSTAT all nve
+run ${equi_steps}
+
+dump TRAJ all custom 500 dump.lammpstrj id mol type element q xu yu zu
+dump_modify TRAJ element C H O
+
+run ${total_steps}
+
+write_data data.eq.lmp
