@@ -6,4 +6,9 @@ Last command: run ${equi_steps}
 	- Theoretically, these particles are moving way too far after certain time steps. 
 	This may be caused by a large simulation box and a small cluster of molecules. 
 	
-        - Decreasing time-step from 2 to 1 fs did not help 
+        - Decreasing time-step from 2 to 1 fs did not help
+	- Changing bond style to harmonic removed this but why? 
+
+- No errors but the PE is nan
+
+> 	-  
