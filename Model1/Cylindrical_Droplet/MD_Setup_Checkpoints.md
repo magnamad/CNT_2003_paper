@@ -9,13 +9,14 @@ On the Water−Carbon Interaction for Use in Molecular Dynamics Simulations of G
 
 1. xyz files of graphite and water		
 
-H2O.xyz  downloaded from http://materia.fisica.unimi.it/manini/dida/structures.html
+H2O.xyz  downloaded from http://materia.fisica.unimi.it/manini/dida/structures.html . One can just create  in gview and specify the bond and angle in the water model force field file.
+
 graphite.cif downloaded from Materials Project Website
 
 
-2.  Extend to appropriate size to neglet finite size effects. Remove Addtional layers if it does not effect the property of study.
+2.  Extend to appropriate size to neglet finite size effects. Remove Additional layers if it does not effect the property of study.
 
-The first method of extension and then cleaving is quiet confusing as the supercell size becomes large. So , I opted for a 
+The first method of extension and then cleaving is quiet confusing as the super cell size becomes large. So , I opted for a 
 personally easier choice og the second option.
  - Convert to a orthorhbic unit cell using atomsk initial.cif -orthogonal-cell final.cif
  - Cleave the edges such that no overlap occurs when PBC is applied
@@ -75,6 +76,20 @@ we can modify it to provide the LJ parameters for CO and OO interaction which ar
 - Fix graphite_B at bottom 
 - Fix Graphite A after leaving 3.4 interlayer distance
 - The fixed command will lead to corner of the sheet to be origin. Just verify again.
+
+11. Using inside box command command to fix graphite infact lead to some atoms in the top layer being out of plane and not overlapping with each other like expected in A-B stacking.
+12.  fixed center command ensured that the atoms in graphite layers were in their respective place but the atoms did not overlap like in A-B stacking.
+13. Finally just using fixed command lead to atoms overlapping like expected in A-B stacking and the atoms were in the same plane as in their respective layers , but the interlayer spacing was not correct despite fixing the second layer at 3.4.
+
+
+> So , I decided to use sed and manually change the z coordinates in graphite-A and graphite-B
+> sed 's/5\.852325/3\.4000/g' graphite-A.xyz > graphite-temp2.xyz . Finally all seems fine.
+
+Then the 13. method worked , finally
+
+> Always check the file with VESTA and see if the box dimensions , box edges  are making sense and there is no overlap between atoms if PBC is applied.
+
+
 
 5. Creating a sample input file which later need to be modifed anyways
 

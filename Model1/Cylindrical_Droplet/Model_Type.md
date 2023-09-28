@@ -4,8 +4,8 @@
 
 - 2 sheets of graphite only considered
 - 2000 water molecules arranged to result in a cylindrical drop configuration
-- The length and breadth of the sheet Precisely 118.43040 in x , and 119.65800 in y. I extend 48 and 28 times th eorthorhomic unit cell 
-  and cleaved appropriately the edge such that no overlap occurs upon PBC. 
+- The length and breadth of the sheet Precisely 118.43040 in x , and 119.65800 in y. I extend 48 and 28 times the orthorhombic unit cell and cleaved appropriately the edge such that no overlap occurs upon PBC.   If you look at the VESTA file , there is a small correction it is 117.19675 * 118.94575 if you look at the x-most and y-most atoms.  However , that is not the super cell. supercell cell length remains 48  and  28 times unit cell in appropriate directions !
+  
 - The height of unit cell is 7.8310 
 
 ### Interactions

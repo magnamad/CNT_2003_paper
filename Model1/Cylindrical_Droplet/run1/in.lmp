@@ -39,8 +39,8 @@ group H2O-SPC type 2 3
 group graphite type 1
 
 ###################### Minimization ####################################
-#minimize 1.0e-4 1.0e-6 100 1000
-#reset_timestep 0
+minimize 1.0e-4 1.0e-6 100 1000
+reset_timestep 0
 ########################################################################
 neighbor 2.0 bin
 # neigh_modify delay 0 every 1 check yes
@@ -60,7 +60,8 @@ timestep 1.0
 fix TVSTAT H2O-SPC nvt temp ${TK} ${TK} 100 
 thermo 1000
 thermo_style custom step cpu etotal ke pe evdwl ecoul elong temp press lx ly lz
-fix statthermo_equi1 all print 1 "${v1} ${v2} ${v3} ${v4} ${v5} ${v6} ${v7} ${v8} ${v9} ${v10}" screen no file thermo_equi1.stat
+#thermo_modify line yaml format float
+fix statthermo_equi1 all print 1 "${v1} ${v2} ${v3} ${v4} ${v5} ${v6} ${v7} ${v8} ${v9} ${v10}" screen yes file thermo_equi1.stat
 dump equi1 all custom 500 equi1.lammpstrj id mol type element q xu yu zu
 dump_modify equi1 element C H O
 run ${equi_steps}
@@ -68,7 +69,8 @@ unfix TVSTAT
 fix EVSTAT H2O-SPC nve
 thermo 1000
 thermo_style custom step cpu etotal ke pe evdwl ecoul elong temp press
-fix statthermo_equi2 all print 1 "${v1} ${v2} ${v3} ${v4} ${v5} ${v6} ${v7} ${v8} ${v9} ${v10}" screen no file thermo_equi2.stat
+#thermo_modify line yaml format float
+fix statthermo_equi2 all print 1 "${v1} ${v2} ${v3} ${v4} ${v5} ${v6} ${v7} ${v8} ${v9} ${v10}" screen yes file thermo_equi2.stat
 dump equi2 all custom 500 equi2.lammpstrj id mol type element q xu yu zu
 dump_modify equi2 element C H O
 run ${equi_steps}
@@ -78,7 +80,8 @@ reset_timestep 0
 fix EVSTAT1 H2O-SPC nve
 thermo 1000
 thermo_style custom step cpu etotal ke pe evdwl ecoul elong temp press
-fix statthermo_prod all print 1 "${v1} ${v2} ${v3} ${v4} ${v5} ${v6} ${v7} ${v8} ${v9} ${v10}" screen no file thermo_prod.stat
+#thermo_modify line yaml format float
+fix statthermo_prod all print 1 "${v1} ${v2} ${v3} ${v4} ${v5} ${v6} ${v7} ${v8} ${v9} ${v10}" screen yes file thermo_prod.stat
 dump prod all custom 500 prod.lammpstrj id mol type element q xu yu zu
 dump_modify prod element C H O
 run ${total_steps}
