@@ -49,7 +49,7 @@ neighbor 2.0 bin
 velocity H2O-SPC  create ${TK} 12345 dist gaussian
 #run 0                             # temperature may not be 300K
 #velocity H2O-SPC  scale ${TK}     # now it should be
-#fix C_atom_fix graphite setforce 0.0 0.0 0.0 
+fix C_atom_fix graphite setforce 0.0 0.0 0.0 
 #velocity graphite set 0.0 0.0 0.0 
 
 fix shake_H2O H2O-SPC shake 0.0001 100 0 b 1 a 1 # shake-H2O is fix id .H2O-SPC is group id 
