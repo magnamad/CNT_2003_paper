@@ -15,5 +15,10 @@ Last command: run ${equi_steps}
 
 - No run errors but graphite atom getting distorted as well as, temperature not correct in NVT , as well as spherical droplet formed when infact cylindrical droplet is expected.
   > Change bond style and run
-  > Forgot to setforce equal to zero. It is necessary ?  , even if we are not integrating C positions.
-  > Fix using the run 0 , and scaling as suggested in LAMMPS tutorial. 
+  > Forgot to setforce equal to zero. It is necessary ?  , even if we are not integrating C positions. 
+  > Fix using the run 0 , and scaling as suggested in LAMMPS tutorial --> Didn't help
+
+The reason for tempearture being wrong is I am pringing the temperature of the whole system ,when infact only the water molecules are moving.
+
+
+ 
